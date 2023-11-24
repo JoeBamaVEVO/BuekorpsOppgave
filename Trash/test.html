@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Styled Form</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <form action="#" method="post" class="MedlemForm">
+        <h2>Legg Til Ett Medlem</h2>
+        <div class="form-row">
+            <div class="InputGroup">
+                <label for="Fornavn">Fornavn:</label>
+                <input type="text" id="Fornavn" name="Fornavn" required>
+            </div>
+            <div class="InputGroup">
+                <label for="Etternavn">Etternavn:</label>
+                <input type="text" id="Etternavn" name="Etternavn" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="InputGroup SingleInput">
+                <label for="Alder">Alder:</label>
+                <input type="number" id="Alder" name="Alder" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="InputGroup SingleInput FullWidth">
+                <label for="Adresse">Adresse:</label>
+                <input type="text" id="Adresse" name="Adresse" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="InputGroup">
+                <label for="Postnummer">PostNr:</label>
+                <input type="text" id="Postnummer" name="Postnummer" required>
+            </div>
+            <div class="InputGroup">
+                <label for="Postadresse">Poststed:</label> <!-- Endre fra Postadresse til Poststed-->
+                <input type="text" id="Postadresse" name="Postadresse" required>
+            </div>      
+        </div>
+
+        <div class="form-row">
+            <div class="InputGroup SingleInput">
+                <label for="Tlf">Telefon:</label>
+                <input type="tel" id="Tlf" name="Tlf" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="InputGroup">
+                <label for="PelotongID">Peloton:</label>
+                <input type="int" id="PelotongID" name="PelotongID" required>
+            </div>
+            <div class="InputGroup">
+                <label for="Rang">Rang:</label>
+                <input type="text" id="Rang" name="Rang" required>
+            </div>
+        </div>
+
+        <input type="submit" value="Send inn">
+    </form>
+</body>
+</html>

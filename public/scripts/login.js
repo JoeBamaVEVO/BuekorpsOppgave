@@ -1,0 +1,24 @@
+const LoginBrukerForm = document.getElementById("LoginBruker")    
+
+
+LoginBrukerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const LoginBrukerFormData = new FormData(LoginBrukerForm);
+    const LoginBrukerData = JSON.stringify(Object.fromEntries(LoginBrukerFormData));
+    console.log(LoginBrukerData);
+    LoginBruker(LoginBrukerData);
+});
+
+
+
+async function LoginBruker(BrukerData){
+    let response = await fetch('/Auth/loginSend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: BrukerData
+    });
+    //Har problemer med å sende filen fra serveren så gjør det på denne måten.
+    // location.reload();
+}

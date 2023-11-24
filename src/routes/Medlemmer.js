@@ -1,0 +1,51 @@
+import express from 'express';
+
+const router = express.Router();
+
+const app = express();
+
+app.use(express.json());
+
+import { getMedlemmer, getMedlem, DeleteMedlem, createMedlem, updateMedlem, FirstUserCheck } from '../DB.js';
+
+router.get("/medlemoversikt", (req, res) => {
+    if(req.session.loggedin){
+        res.sendFile(path.join(__dirname, "../private/medlemoversikt.html"));
+        res.sendFile(path.join(__dirname, "../private/scripts/CRUD.js"));
+    }else{
+        res.send("Noe gikk galt! Er du logget inn?")
+    }
+})
+
+router.get("/medlemmer", async (req, res) => {
+    const users = await getMedlemmer();
+    res.json(users);
+});
+
+
+router.get("/medlemmer/:id", async (req, res) => {
+    const id = req.params.id;
+    const users = await getMedlem(id);
+    res.status(201).send(users);
+});
+
+router.delete("/medlemmer/:id", async (req, res) => {
+    const id = req.params.id;
+    const users = await DeleteMedlem(id);
+    res.json(users);
+});
+
+router.post("/medlemmer", async (req, res) => {
+    const { Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang } = req.body;
+    const user = createMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang);
+    res.send(user)
+});
+
+router.put("/medlemmer/:id", async (req, res) => {
+    const id = req.params.id;
+    const { Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang } = req.body;
+    const user = await updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id);
+    res.send(user);
+});
+
+export default router;
