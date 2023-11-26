@@ -3,6 +3,9 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import path from 'path';
+const __dirname = path.resolve();
+
 
 const router = express.Router();
 
@@ -15,6 +18,10 @@ import { CreateBruker, GetBruker } from '../DB.js';
 
 // Set up salt rounds for hashing and comparing passwords
 const saltRounds = 10;
+
+router.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/login.html'));
+});
 
 // Register a new user
 router.post('/Nybruker', async (req, res) => {
@@ -38,7 +45,7 @@ router.post('/loginSend', async (req, res) => {
   
   const bruker = await GetBruker(Brukernavn);
 
-  bcrypt.compare(Passord, bruker.Passord, function (err, result) {
+  bcrypt.compare(Passord, bruker[0].Passord, function (err, result) {
     if (result) {
       res.send('Logged in');
     } else {
