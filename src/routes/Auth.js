@@ -4,6 +4,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import path from 'path';
+import dotenv from 'dotenv';
 const __dirname = path.resolve();
 
 
@@ -40,17 +41,27 @@ router.post('/Nybruker', async (req, res) => {
 
 // Log in a user
 router.post('/loginSend', async (req, res) => {
-  
   const { Brukernavn, Passord } = req.body;
-  
-  const bruker = await GetBruker(Brukernavn);
 
-  bcrypt.compare(Passord, bruker[0].Passord, function (err, result) {
-    if (result) {
-      res.send('Logged in');
-    } else {
-      res.send('Wrong password');
+  // Burde fikse dette tbh no cap frfr ong
+  // Henter bruker fra DB og legger inn i JSON
+  const brukere = await GetBruker(Brukernavn);
+  const bruker = brukere[0];
+
+
+  bcrypt.compare(Passord, bruker.Passord, function (err, result) {
+    if (!result) {
+      return res.status(403).json({
+        error: "invalid login",
+      });
     }
+  // Sletter passordet fra JSON
+  delete bruker.password; 
+  // Lager en token
+  const token = jwt.sign(bruker, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+  res.cookie("token", token);
+  res.send("Ur logged in ")
   });
 });
 
