@@ -47,7 +47,7 @@ router.post('/loginSend', async (req, res) => {
   // Henter bruker fra DB og legger inn i JSON
   const brukere = await GetBruker(Brukernavn);
   const bruker = brukere[0];
-
+  // res.send(bruker.Passord)
 
   bcrypt.compare(Passord, bruker.Passord, function (err, result) {
     if (!result) {
@@ -59,15 +59,15 @@ router.post('/loginSend', async (req, res) => {
   delete bruker.password; 
   // Lager en token
   const token = jwt.sign(bruker, process.env.JWT_SECRET, { expiresIn: "1h" });
-
   res.cookie("token", token);
-  res.send("Ur logged in ")
+  res.send("Logged In");
   });
 });
 
 // Log out a user
 router.post('/logout', (req, res) => {
-  res.send('ur logged out');
+  res.clearCookie("token");
+  return res.redirect("/auth");
 });
 
 export default router;

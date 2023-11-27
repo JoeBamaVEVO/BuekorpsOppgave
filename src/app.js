@@ -2,7 +2,9 @@
 import express from 'express';
 import path from 'path';
 
-// Import the routes
+// Import the routesrs
+import {cookieJwtAuth} from './middleware/token.js';
+
 import loginRoutes from './routes/Auth.js';
 import medlemRoutes from './routes/Medlemmer.js';
 
@@ -11,16 +13,26 @@ const __dirname = path.resolve();
 
 // Vi setter opp express
 const app = express();
+
+import cookieParser from 'cookie-parser';
+app.use(cookieParser());
+
 // Vi setter opp express til å servere statiske filer fra public mappen
 app.use(express.static(path.join(__dirname, '../public')));
 // Vi setter opp express til å parse JSON
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
+app.get("/", cookieJwtAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
 });
 
-app.use('/medlem', medlemRoutes);
+app.get("/test", (req, res) => {
+    const cookies = req.cookies.token;
+    res.send(cookies);
+    // res.sendFile("DU ER LOGGET INN")
+});
+
+app.use('/medlem', cookieJwtAuth, medlemRoutes);
 
 app.use('/auth', loginRoutes);
 

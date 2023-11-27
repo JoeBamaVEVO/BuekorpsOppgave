@@ -12,11 +12,12 @@ app.use(express.json());
 import { getMedlemmer, getMedlem, DeleteMedlem, createMedlem, updateMedlem, FirstUserCheck } from '../DB.js';
 
 router.get("/medlemoversikt", (req, res) => {
-    if(req.session.loggedin){
-        res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
-    }else{
-        res.send("Noe gikk galt! Er du logget inn?")
-    }
+    res.send("hey")
+    // if(req.session.loggedin){
+    //     res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
+    // }else{
+    //     res.send("Noe gikk galt! Er du logget inn?")
+    // }
 })
 
 router.get("/medlemmer", async (req, res) => {
