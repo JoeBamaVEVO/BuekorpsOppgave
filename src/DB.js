@@ -52,8 +52,8 @@ export async function CreateBruker(Brukernavn, Email, Passord){
     return result
 }
 
-export async function LoginBruker(Brukernavn){
-    const [result] = await pool.query("SELECT Passord FROM brukere WHERE Brukernavn = ?", [Brukernavn])
+export async function GetBruker(Brukernavn){
+    const [result] = await pool.query("SELECT * FROM brukere WHERE Brukernavn = ?", [Brukernavn])
     return result
 }
 

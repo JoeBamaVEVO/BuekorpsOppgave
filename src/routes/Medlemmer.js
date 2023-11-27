@@ -1,4 +1,7 @@
 import express from 'express';
+import path from 'path';
+
+const __dirname = path.resolve();
 
 const router = express.Router();
 
@@ -9,19 +12,18 @@ app.use(express.json());
 import { getMedlemmer, getMedlem, DeleteMedlem, createMedlem, updateMedlem, FirstUserCheck } from '../DB.js';
 
 router.get("/medlemoversikt", (req, res) => {
-    if(req.session.loggedin){
-        res.sendFile(path.join(__dirname, "../private/medlemoversikt.html"));
-        res.sendFile(path.join(__dirname, "../private/scripts/CRUD.js"));
-    }else{
-        res.send("Noe gikk galt! Er du logget inn?")
-    }
+    res.send("hey")
+    // if(req.session.loggedin){
+    //     res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
+    // }else{
+    //     res.send("Noe gikk galt! Er du logget inn?")
+    // }
 })
 
 router.get("/medlemmer", async (req, res) => {
     const users = await getMedlemmer();
     res.json(users);
 });
-
 
 router.get("/medlemmer/:id", async (req, res) => {
     const id = req.params.id;
