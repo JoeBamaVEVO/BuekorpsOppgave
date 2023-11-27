@@ -57,6 +57,11 @@ export async function GetBruker(Brukernavn){
     return result
 }
 
+export async function GetBrukere(){
+    const [result] = await pool.query("SELECT * FROM brukere")
+    return result
+}
+
 export async function FirstUserCheck() {
     const [result] = await pool.query(`SELECT COUNT(*) FROM brukere`)
     return result

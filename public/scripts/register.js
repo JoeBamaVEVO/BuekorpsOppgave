@@ -8,7 +8,6 @@ RegisterBrukerForm.addEventListener("submit", (e) => {
     RegisterBruker(RegisterBrukerData);
 });
 
-
 async function RegisterBruker(BrukerData){
     let response = await fetch('/Auth/Nybruker', {
         method: 'POST',
