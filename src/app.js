@@ -40,9 +40,9 @@ app.use((err, req, res, next) => {
 
 //Admin Routes
 
-app.use('/admin', cookieJwtAuth, adminRoutes);
+app.use('/admin', cookieJwtAuth, JWTAdmin, adminRoutes);
 
-app.get('/test', JWTAdmin, (req, res) => {
+app.get('/test', cookieJwtAuth, JWTAdmin, (req, res) => {
 }); 
 
 app.listen(8080, () => {
