@@ -4,6 +4,7 @@ import path from 'path';
 
 // Import the routesrs
 import {cookieJwtAuth} from './middleware/token.js';
+import {JWTAdmin} from './middleware/isAdmin.js';
 
 import loginRoutes from './routes/Auth.js';
 import medlemRoutes from './routes/Medlemmer.js';
@@ -41,9 +42,8 @@ app.use((err, req, res, next) => {
 
 app.use('/admin', cookieJwtAuth, adminRoutes);
 
-app.get('/test', (req, res) => {
-    res.sendFile(path.join(__dirname, "../private/tester.html"))
-});
+app.get('/test', JWTAdmin, (req, res) => {
+}); 
 
 app.listen(8080, () => {
     console.log('server is running on http://localhost:8080');

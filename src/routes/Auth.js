@@ -42,12 +42,10 @@ router.post('/Nybruker', async (req, res) => {
 // Log in a user
 router.post('/loginSend', async (req, res) => {
   const { Brukernavn, Passord } = req.body;
-
   // Burde fikse dette tbh no cap frfr ong
   // Henter bruker fra DB og legger inn i JSON
   const brukere = await GetBruker(Brukernavn);
   const bruker = brukere[0];
-  // res.send(bruker.Passord)
 
   bcrypt.compare(Passord, bruker.Passord, function (err, result) {
     if (!result) {
@@ -60,7 +58,7 @@ router.post('/loginSend', async (req, res) => {
   // Lager en token
   const token = jwt.sign(bruker, process.env.JWT_SECRET, { expiresIn: "1h" });
   res.cookie("token", token);
-  res.send("Logged In");
+  res.redirect("/");
   });
 });
 

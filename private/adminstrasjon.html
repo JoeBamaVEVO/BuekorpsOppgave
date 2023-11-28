@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <script src="scripts/NyBruker.js" defer ></script>
+    <script src="scripts/admin.js" defer ></script>
 </head>
 <body>
+    <nav>
+        <form action="/Auth/logout" method="POST">
+            <button id="Logout">Logout</button>
+        </form>
+        <form action="/" method="GET">
+            <button id="Logout">Medlemoversikt</button>
+        </form>
+    </nav>
     <div class="container">
         <div class="btnMeny">
             <button id="btnNyBruker" class="btnNyMedlem">Opprett en ny bruker</button>

@@ -10,7 +10,6 @@ LoginBrukerForm.addEventListener("submit", (e) => {
 });
 
 
-
 async function LoginBruker(BrukerData){
     let response = await fetch('/Auth/loginSend', {
         method: 'POST',
@@ -19,6 +18,5 @@ async function LoginBruker(BrukerData){
         },
         body: BrukerData
     });
-    //Har problemer med å sende filen fra serveren så gjør det på denne måten.
-    // location.reload();
+    window.location.href = "/";
 }
