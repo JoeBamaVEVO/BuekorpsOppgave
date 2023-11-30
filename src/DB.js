@@ -6,6 +6,7 @@
 // Vi skal ha en funksjon for å endre et medlem
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
+import { Console } from 'console';
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -45,16 +46,20 @@ export async function updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnumme
     return getMedlem(id)
 }
 
-export async function CreateBruker(Brukernavn, Email, Passord){
+export async function CreateBruker(Brukernavn, Email, Passord, isAdmin){
     const [result] = await pool.query(
-        'INSERT INTO brukere (Brukernavn, Email, Passord) VALUES (?,?,?)', 
-        [Brukernavn, Email, Passord])
+        'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin) VALUES (?,?,?,?)', 
+        [Brukernavn, Email, Passord, isAdmin])
     return result
 }
 
 export async function GetBruker(Brukernavn){
     const [result] = await pool.query("SELECT * FROM brukere WHERE Brukernavn = ?", [Brukernavn])
-    return result
+    if (result.length === 0){
+        throw new Error("Bruker ikke funnet")
+    }else{
+        return result
+    }
 }
 
 export async function GetBrukere(){
@@ -64,7 +69,5 @@ export async function GetBrukere(){
 
 export async function FirstUserCheck() {
     const [result] = await pool.query(`SELECT COUNT(*) FROM brukere`)
-    return result
+    return result[0]['COUNT(*)']
 } 
-
-

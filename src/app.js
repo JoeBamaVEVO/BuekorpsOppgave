@@ -10,6 +10,8 @@ import loginRoutes from './routes/Auth.js';
 import medlemRoutes from './routes/Medlemmer.js';
 import adminRoutes from './routes/admin.js';
 
+
+
 // Vi setter __dirname til å være der vi kjører Node Serveren fra
 const __dirname = path.resolve();
 
@@ -24,7 +26,7 @@ app.use(express.static(path.join(__dirname, '../public'),{ 'extensions': ['html'
 // Vi setter opp express til å parse JSON
 app.use(express.json());
 
-app.get("/", cookieJwtAuth, (req, res) => {
+app.get("/", cookieJwtAuth, async (req, res) => {
     res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
 });
 
@@ -41,9 +43,6 @@ app.use((err, req, res, next) => {
 //Admin Routes
 
 app.use('/admin', cookieJwtAuth, JWTAdmin, adminRoutes);
-
-app.get('/test', cookieJwtAuth, JWTAdmin, (req, res) => {
-}); 
 
 app.listen(8080, () => {
     console.log('server is running on http://localhost:8080');

@@ -20,3 +20,14 @@ async function LoginBruker(BrukerData){
     });
     window.location.href = "/";
 }
+
+FirstUserCheck()    
+async function FirstUserCheck(){
+    let response = await fetch('/Auth/Setup', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+}
