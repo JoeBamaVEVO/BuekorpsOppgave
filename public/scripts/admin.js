@@ -26,7 +26,8 @@ function ListBruker(bruker) {
     const ID = row.insertCell(0)
     const Brukernavn = row.insertCell(1)
     const Email = row.insertCell(2)
-    const btn = row.insertCell(3)
+    const roller = row.insertCell(3)
+    const btn = row.insertCell(4)
 
     let DelBtn = document.createElement("img")
     let EditBtn = document.createElement("img")
@@ -43,6 +44,7 @@ function ListBruker(bruker) {
     ID.innerHTML = bruker.idBrukere
     Brukernavn.innerHTML = bruker.Brukernavn
     Email.innerHTML = bruker.Email
+    roller.innerHTML = bruker.Stilling
       
     btn.appendChild(MerInfoBtn)
     btn.appendChild(EditBtn)
