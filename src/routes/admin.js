@@ -26,4 +26,22 @@ router.get("/bruker/:brukernavn", async (req, res) => {
 })
 
 
+// Register a new user
+router.post('/Nybruker', async (req, res) => {
+    const { Brukernavn, Email, Passord, isAdmin } = req.body;
+  
+    bcrypt.hash(Passord, saltRounds, async (err, hash) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Noe gikk galt');
+      } else {
+        const user = await CreateBruker(Brukernavn, Email, hash, isAdmin);
+        delete user.password;
+        delete user.isAdmin;
+        res.send(user);
+      }
+    });
+  });
+
+
 export default router;

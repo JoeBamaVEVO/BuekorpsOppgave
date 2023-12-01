@@ -1,9 +1,40 @@
 let btnNyBruker = document.getElementById("btnNyBruker")
 let BrukerModal = document.getElementById("MedlemModal")
 
+let RegisterBrukerForm = document.getElementById("RegisterBruker")
+
+let AdminBtn = document.getElementById("isAdmin")
+
+AdminBtn.addEventListener("click", () => {
+    if(AdminBtn.checked){
+        let select     
+    }
+})
+
 btnNyBruker.addEventListener("click", () => {
     BrukerModal.showModal()
 })
+
+RegisterBrukerForm.addEventListener("submit", () => {
+    MedlemDialog.close() // Lukker dialogen
+    e.preventDefault() // Forhindrer at skjemaet sender data til serveren
+    const brukerFormData = new FormData(RegisterBrukerForm) // Lager et FormData objekt av skjemaet
+    const brukerData = JSON.stringify(Object.fromEntries(brukerFormData)); // Lager et JSON objekt av FormData
+    // RegisterBrukerForm(brukerData) // Kaller på addUser funksjonen og sender med JSON objektet
+})
+
+async function RegisterBruker(brukerData){
+    let response = await fetch('/Admin/Nybruker', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: brukerData
+    });
+    let result = await response.json();
+    console.log(result);
+    location.reload();
+}
 
 
 // Henter ut alle medlemmer fra databasen og legger de til i tabellen

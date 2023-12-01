@@ -24,22 +24,7 @@ router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
-// Register a new user
-router.post('/Nybruker', async (req, res) => {
-  const { Brukernavn, Email, Passord, isAdmin } = req.body;
 
-  bcrypt.hash(Passord, saltRounds, async (err, hash) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send('Noe gikk galt');
-    } else {
-      const user = await CreateBruker(Brukernavn, Email, hash, isAdmin);
-      delete user.password;
-      delete user.isAdmin;
-      res.send(user);
-    }
-  });
-});
 
 router.post('/loginSend', async (req, res) => {
   const { Brukernavn, Passord } = req.body;
@@ -74,7 +59,7 @@ router.get('/setup', async (req, res) =>{
   let result = await FirstUserCheck();
   if(result === 0){
     bcrypt.hash("1234", saltRounds, async (err, hash) => {
-      const user = await CreateBruker("Admin", "admin@placeholder.com", hash, 1);
+      const user = await CreateBruker("Admin", "admin@placeholder.com", hash, 1, 2);
     })
   }
 })

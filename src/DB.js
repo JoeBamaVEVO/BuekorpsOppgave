@@ -52,17 +52,18 @@ export async function updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnumme
     return getMedlem(id)
 }
 
-export async function CreateBruker(Brukernavn, Email, Passord, isAdmin){
+export async function CreateBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter){
     const [result] = await pool.query(
-        'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin) VALUES (?,?,?,?)', 
-        [Brukernavn, Email, Passord, isAdmin])
+        'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin, Rettigheter_idRettigheter) VALUES (?,?,?,?,?)', 
+        [Brukernavn, Email, Passord, isAdmin, idRettigheter])
     return result
 }
 
 export async function GetBruker(Brukernavn){
     const [result] = await pool.query(
         `SELECT * FROM brukere 
-        I
+        INNER JOIN rettigheter
+        ON Rettigheter_idRettigheter = idRettigheter
         WHERE Brukernavn = ?; 
         `, [Brukernavn])
     if (result.length === 0){
