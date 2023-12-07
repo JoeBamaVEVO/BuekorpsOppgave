@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { GetBrukere, GetBruker } from '../DB.js';
+import { getBrukere, getBruker } from '../DB.js';
 
 
 const __dirname = path.resolve();
@@ -15,13 +15,13 @@ router.get("/", (req, res) => {
 
 
 router.get("/brukere", async (req, res) => {
-    const Brukere = await GetBrukere();
+    const Brukere = await getBrukere();
     res.json(Brukere);
 })
 
 router.get("/bruker/:brukernavn", async (req, res) => {
     const brukernavn = req.params.brukernavn;
-    const bruker = await GetBruker(brukernavn);
+    const bruker = await getBruker(brukernavn);
     res.status(201).send(bruker);
 })
 
