@@ -1,6 +1,8 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
 import path from 'path';
-import { getBrukere, getBruker } from '../DB.js';
+import { getBrukere, getBruker, createBruker } from '../DB.js';
+const saltRounds = 10;
 
 
 const __dirname = path.resolve();
@@ -25,17 +27,20 @@ router.get("/bruker/:brukernavn", async (req, res) => {
     res.status(201).send(bruker);
 })
 
-
 // Register a new user
 router.post('/Nybruker', async (req, res) => {
-    const { Brukernavn, Email, Passord, isAdmin } = req.body;
+    const { Brukernavn, Email, Passord, isAdmin, Rolle } = req.body;
+    let admin = 0;
   
     bcrypt.hash(Passord, saltRounds, async (err, hash) => {
       if (err) {
         console.log(err);
         res.status(500).send('Noe gikk galt');
       } else {
-        const user = await CreateBruker(Brukernavn, Email, hash, isAdmin);
+        if (isAdmin === "on") {
+          admin = 1;
+        }
+        const user = await createBruker(Brukernavn, Email, hash, isAdmin, Rolle);
         delete user.password;
         delete user.isAdmin;
         res.send(user);
