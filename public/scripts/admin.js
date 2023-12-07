@@ -5,11 +5,11 @@ let RegisterBrukerForm = document.getElementById("RegisterBruker")
 
 let AdminBtn = document.getElementById("isAdmin")
 
-AdminBtn.addEventListener("click", () => {
-    if(AdminBtn.checked){
-        let select     
-    }
-})
+// AdminBtn.addEventListener("click", () => {
+//     if(AdminBtn.checked){
+//         let select     
+//     }
+// })
 
 btnNyBruker.addEventListener("click", () => {
     BrukerModal.showModal()
@@ -33,7 +33,7 @@ async function RegisterBruker(brukerData){
     });
     let result = await response.json();
     console.log(result);
-    location.reload();
+    // location.reload();
 }
 
 
