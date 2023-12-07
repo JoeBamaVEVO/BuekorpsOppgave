@@ -1,88 +1,84 @@
-// Her skal vi ha all database funksjonalitet
-// Vi skal ha en funksjon for å hente alle medlemmer
-// Vi skal ha en funksjon for å hente et medlem
-// Vi skal ha en funksjon for å slette et medlem
-// Vi skal ha en funksjon for å opprette et medlem
-// Vi skal ha en funksjon for å endre et medlem
-import mysql from 'mysql2';
+// Here we will have all database functionality
+// We will have a function to get all members
+// We will have a function to get a member
+// We will have a function to delete a member
+// We will have a function to create a member
+// We will have a function to update a member
+import sqlite from 'better-sqlite3';
 import dotenv from 'dotenv';
-import { Console } from 'console';
 dotenv.config();
 
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PW,
-    database: process.env.MYSQL_DB,
-}).promise(); 
+const db = sqlite(process.env.SQLITE_DB);
 
-export async function getMedlemmer() {
-    const [rows] = await pool.query(
-        `SELECT * FROM medlem
+export function getMedlemmer() {
+    const rows = db.prepare(`
+        SELECT * FROM medlem
         INNER JOIN rang 
         ON Rang_idRang = idRang
         INNER JOIN pelotong
         ON Pelotong_idPelotong = idPelotong
-        `)
+    `).all();
     return rows;
 }
 
-export async function getMedlem(id) {
-    const [rows] = await pool.query("SELECT * FROM medlem WHERE MedlemsID = ?", [id])
-    return rows;
+export function getMedlem(id) {
+    const row = db.prepare("SELECT * FROM medlem WHERE MedlemsID = ?").get(id);
+    return row;
 }
 
-export async function DeleteMedlem(id) {
-    const [rows] = await pool.query("DELETE FROM medlem WHERE MedlemsID = ?", [id])
-    return rows;
+export function deleteMedlem(id) {
+    const result = db.prepare("DELETE FROM medlem WHERE MedlemsID = ?").run(id);
+    return result;
 }
 
-export async function createMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang){
-    const [result] = await pool.query(
-        'INSERT INTO medlem (Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, Pelotong_idPelotong, Rang_idRang) VALUES (?,?,?,?,?,?,?,?,?)', 
-        [Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang])
-    const id = result.insertId
-    return getMedlem(id)
+export function createMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang) {
+    const result = db.prepare(
+        'INSERT INTO medlem (Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, Pelotong_idPelotong, Rang_idRang) VALUES (?,?,?,?,?,?,?,?,?)'
+    ).run(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang);
+    const id = result.lastInsertRowid;
+    return getMedlem(id);
 }
 
-export async function updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id){
-    const [result] = await pool.query(
-        'UPDATE medlem SET Fornavn = ?, Etternavn = ?, Alder = ?, Adresse = ?, Postnummer = ?, Postadresse = ?, Tlf = ?, Pelotong_idPelotong = ?, Rang_idRang = ? WHERE MedlemsID = ?', 
-        [Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id])
-    return getMedlem(id)
+export function updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id) {
+    db.prepare(
+        'UPDATE medlem SET Fornavn = ?, Etternavn = ?, Alder = ?, Adresse = ?, Postnummer = ?, Postadresse = ?, Tlf = ?, Pelotong_idPelotong = ?, Rang_idRang = ? WHERE MedlemsID = ?'
+    ).run(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id);
+    return getMedlem(id);
 }
 
-export async function CreateBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter){
-    const [result] = await pool.query(
-        'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin, Rettigheter_idRettigheter) VALUES (?,?,?,?,?)', 
-        [Brukernavn, Email, Passord, isAdmin, idRettigheter])
-    return result
+export function createBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter) {
+    const result = db.prepare(
+        'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin, Rettigheter_idRettigheter) VALUES (?,?,?,?,?)'
+    ).run(Brukernavn, Email, Passord, isAdmin, idRettigheter);
+    return result;
 }
 
-export async function GetBruker(Brukernavn){
-    const [result] = await pool.query(
+export function getBruker(Brukernavn) {
+    const result = db.prepare(
         `SELECT * FROM brukere 
         INNER JOIN rettigheter
         ON Rettigheter_idRettigheter = idRettigheter
         WHERE Brukernavn = ?; 
-        `, [Brukernavn])
-    if (result.length === 0){
-        throw new Error("Bruker ikke funnet")
-    }else{
-        return result
+        `
+    ).get(Brukernavn);
+    if (!result) {
+        throw new Error("User not found");
+    } else {
+        return result;
     }
 }
 
-export async function GetBrukere(){
-    const [result] = await pool.query(
+export function getBrukere() {
+    const result = db.prepare(
         `SELECT * FROM brukere
         INNER JOIN rettigheter 
         ON Rettigheter_idRettigheter = idRettigheter 
-        `)
-    return result
+        `
+    ).all();
+    return result;
 }
 
-export async function FirstUserCheck() {
-    const [result] = await pool.query(`SELECT COUNT(*) FROM brukere`)
-    return result[0]['COUNT(*)']
-} 
+export function firstUserCheck() {
+    const result = db.prepare(`SELECT COUNT(*) FROM brukere`).get();
+    return result['COUNT(*)'];
+}

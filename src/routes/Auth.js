@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 // Import your functions for creating a user and login
-import { CreateBruker, GetBruker, FirstUserCheck } from '../DB.js';
+import { createBruker, getBruker, firstUserCheck } from '../DB.js';
 
 // Set up salt rounds for hashing and comparing passwords
 const saltRounds = 10;
@@ -29,8 +29,7 @@ router.get('/', (req, res) => {
 router.post('/loginSend', async (req, res) => {
   const { Brukernavn, Passord } = req.body;
   try {
-      const brukere = await GetBruker(Brukernavn);
-      const bruker = brukere[0];
+      const bruker = await getBruker(Brukernavn);
       try{
         bcrypt.compare(Passord, bruker.Passord).then((result) => {
           delete bruker.password; 
@@ -56,10 +55,10 @@ router.post('/logout', (req, res) => {
 
 
 router.get('/setup', async (req, res) =>{
-  let result = await FirstUserCheck();
+  let result = await firstUserCheck();
   if(result === 0){
-    bcrypt.hash("1234", saltRounds, async (err, hash) => {
-      const user = await CreateBruker("Admin", "admin@placeholder.com", hash, 1, 2);
+    bcrypt.hash("1234", saltRounds, async (err, rs) => {
+      const user = await createBruker("Admin", "admin@placeholder.com", hash, 1, 2);
     })
   }
 })
