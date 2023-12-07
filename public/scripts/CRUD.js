@@ -38,16 +38,16 @@ async function UpdateUser(id) {
     // Vi tar ut dataen fra JSON objektet og fyller ut skjemaet
     // console.log("dette er medlemdata");
     // console.log(MedlemData);
-    console.log(MedlemData[0]);
-    console.log(Object.keys(MedlemData[0]));
+    console.log(MedlemData);
+    console.log(Object.keys(MedlemData));
     let form = OppdaterMedlemForm;
 
-    MedlemID.innerText = MedlemData[0].MedlemsID;
+    MedlemID.innerText = MedlemData.MedlemsID;
 
-    for(let key of Object.keys(MedlemData[0])) {
+    for(let key of Object.keys(MedlemData)) {
         // console.log(key);
         if (form.elements[key]) {
-            form.elements[key].value = MedlemData[0][key];
+            form.elements[key].value = MedlemData[key];
         }
     }
 
