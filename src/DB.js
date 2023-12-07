@@ -6,6 +6,7 @@
 // Vi skal ha en funksjon for å endre et medlem
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
+import { Console } from 'console';
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -16,7 +17,13 @@ const pool = mysql.createPool({
 }).promise(); 
 
 export async function getMedlemmer() {
-    const [rows] = await pool.query(`SELECT * FROM medlem`)
+    const [rows] = await pool.query(
+        `SELECT * FROM medlem
+        INNER JOIN rang 
+        ON Rang_idRang = idRang
+        INNER JOIN pelotong
+        ON Pelotong_idPelotong = idPelotong
+        `)
     return rows;
 }
 
@@ -32,7 +39,7 @@ export async function DeleteMedlem(id) {
 
 export async function createMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang){
     const [result] = await pool.query(
-        'INSERT INTO medlem (Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang) VALUES (?,?,?,?,?,?,?,?,?)', 
+        'INSERT INTO medlem (Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, Pelotong_idPelotong, Rang_idRang) VALUES (?,?,?,?,?,?,?,?,?)', 
         [Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang])
     const id = result.insertId
     return getMedlem(id)
@@ -40,26 +47,42 @@ export async function createMedlem(Fornavn, Etternavn, Alder, Adresse, Postnumme
 
 export async function updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id){
     const [result] = await pool.query(
-        'UPDATE medlem SET Fornavn = ?, Etternavn = ?, Alder = ?, Adresse = ?, Postnummer = ?, Postadresse = ?, Tlf = ?, PelotongID = ?, Rang = ? WHERE MedlemsID = ?', 
+        'UPDATE medlem SET Fornavn = ?, Etternavn = ?, Alder = ?, Adresse = ?, Postnummer = ?, Postadresse = ?, Tlf = ?, Pelotong_idPelotong = ?, Rang_idRang = ? WHERE MedlemsID = ?', 
         [Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id])
     return getMedlem(id)
 }
 
-export async function CreateBruker(Brukernavn, Email, Passord){
+export async function CreateBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter){
     const [result] = await pool.query(
-        'INSERT INTO brukere (Brukernavn, Email, Passord) VALUES (?,?,?)', 
-        [Brukernavn, Email, Passord])
+        'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin, Rettigheter_idRettigheter) VALUES (?,?,?,?,?)', 
+        [Brukernavn, Email, Passord, isAdmin, idRettigheter])
     return result
 }
 
 export async function GetBruker(Brukernavn){
-    const [result] = await pool.query("SELECT * FROM brukere WHERE Brukernavn = ?", [Brukernavn])
+    const [result] = await pool.query(
+        `SELECT * FROM brukere 
+        INNER JOIN rettigheter
+        ON Rettigheter_idRettigheter = idRettigheter
+        WHERE Brukernavn = ?; 
+        `, [Brukernavn])
+    if (result.length === 0){
+        throw new Error("Bruker ikke funnet")
+    }else{
+        return result
+    }
+}
+
+export async function GetBrukere(){
+    const [result] = await pool.query(
+        `SELECT * FROM brukere
+        INNER JOIN rettigheter 
+        ON Rettigheter_idRettigheter = idRettigheter 
+        `)
     return result
 }
 
 export async function FirstUserCheck() {
     const [result] = await pool.query(`SELECT COUNT(*) FROM brukere`)
-    return result
+    return result[0]['COUNT(*)']
 } 
-
-

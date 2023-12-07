@@ -8,16 +8,3 @@ RegisterBrukerForm.addEventListener("submit", (e) => {
     RegisterBruker(RegisterBrukerData);
 });
 
-
-async function RegisterBruker(BrukerData){
-    let response = await fetch('/Auth/Nybruker', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: BrukerData
-    });
-    let result = await response.json();
-    console.log(result);
-    // location.reload();
-}

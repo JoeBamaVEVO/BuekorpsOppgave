@@ -40,7 +40,7 @@ async function UpdateUser(id) {
     // console.log(MedlemData);
     console.log(MedlemData[0]);
     console.log(Object.keys(MedlemData[0]));
-    form = OppdaterMedlemForm;
+    let form = OppdaterMedlemForm;
 
     MedlemID.innerText = MedlemData[0].MedlemsID;
 
@@ -59,7 +59,7 @@ async function UpdateUser(id) {
 //     Denne blir aktivert når Formen blir submitted
 OppdaterMedlemForm.addEventListener("submit", (e) => {
     e.preventDefault(); // Forhindrer at skjemaet sender data til serveren
-    id = document.getElementById("MedlemID").innerText;
+    let id = document.getElementById("MedlemID").innerText;
     console.log('Denne brukeren er bruker ' + id);
     OppdaterMedlemDialog.close(); // Lukker dialogen
     const OppdaterMedlemFormData = new FormData(OppdaterMedlemForm); // Lager et FormData objekt av skjemaet
@@ -90,7 +90,7 @@ function ListUsers(medlem) {
     const ID = row.insertCell(0)
     const FNavn = row.insertCell(1)
     const LNavn = row.insertCell(2)
-    const Alder = row.insertCell(3)
+    const Rang = row.insertCell(3)
     const Pelotong = row.insertCell(4)
     const btn = row.insertCell(5)
 
@@ -109,8 +109,8 @@ function ListUsers(medlem) {
     ID.innerHTML = medlem.MedlemsID
     FNavn.innerHTML = medlem.Fornavn
     LNavn.innerHTML = medlem.Etternavn
-    Alder.innerHTML = medlem.Alder
-    Pelotong.innerHTML = medlem.PelotongID 
+    Rang.innerHTML = medlem.RangTittel
+    Pelotong.innerHTML = medlem.PelotongTittel
       
     btn.appendChild(MerInfoBtn)
     btn.appendChild(EditBtn)

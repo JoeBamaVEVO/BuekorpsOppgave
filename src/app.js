@@ -4,9 +4,13 @@ import path from 'path';
 
 // Import the routesrs
 import {cookieJwtAuth} from './middleware/token.js';
+import {JWTAdmin} from './middleware/isAdmin.js';
 
 import loginRoutes from './routes/Auth.js';
 import medlemRoutes from './routes/Medlemmer.js';
+import adminRoutes from './routes/admin.js';
+
+
 
 // Vi setter __dirname til å være der vi kjører Node Serveren fra
 const __dirname = path.resolve();
@@ -18,18 +22,12 @@ import cookieParser from 'cookie-parser';
 app.use(cookieParser());
 
 // Vi setter opp express til å servere statiske filer fra public mappen
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public'),{ 'extensions': ['html', 'htm', 'css']}));
 // Vi setter opp express til å parse JSON
 app.use(express.json());
 
-app.get("/", cookieJwtAuth, (req, res) => {
+app.get("/", cookieJwtAuth, async (req, res) => {
     res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
-});
-
-app.get("/test", (req, res) => {
-    const cookies = req.cookies.token;
-    res.send(cookies);
-    // res.sendFile("DU ER LOGGET INN")
 });
 
 app.use('/medlem', cookieJwtAuth, medlemRoutes);
@@ -41,7 +39,12 @@ app.use((err, req, res, next) => {
     res.status(500).send("Noe gikk galt");
 });
 
-app.listen(8080 , () => {
+
+//Admin Routes
+
+app.use('/admin', cookieJwtAuth, JWTAdmin, adminRoutes);
+
+app.listen(8080, () => {
     console.log('server is running on http://localhost:8080');
 });
 

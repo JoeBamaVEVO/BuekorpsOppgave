@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 // Import your functions for creating a user and login
-import { CreateBruker, GetBruker } from '../DB.js';
+import { CreateBruker, GetBruker, FirstUserCheck } from '../DB.js';
 
 // Set up salt rounds for hashing and comparing passwords
 const saltRounds = 10;
@@ -24,50 +24,45 @@ router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
-// Register a new user
-router.post('/Nybruker', async (req, res) => {
-  const { Brukernavn, Email, Passord } = req.body;
 
-  bcrypt.hash(Passord, saltRounds, async (err, hash) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send('Noe gikk galt');
-    } else {
-      const user = await CreateBruker(Brukernavn, Email, hash);
-      res.send(user);
-    }
-  });
-});
 
-// Log in a user
 router.post('/loginSend', async (req, res) => {
   const { Brukernavn, Passord } = req.body;
-
-  // Burde fikse dette tbh no cap frfr ong
-  // Henter bruker fra DB og legger inn i JSON
-  const brukere = await GetBruker(Brukernavn);
-  const bruker = brukere[0];
-  // res.send(bruker.Passord)
-
-  bcrypt.compare(Passord, bruker.Passord, function (err, result) {
-    if (!result) {
-      return res.status(403).json({
-        error: "invalid login",
-      });
-    }
-  // Sletter passordet fra JSON
-  delete bruker.password; 
-  // Lager en token
-  const token = jwt.sign(bruker, process.env.JWT_SECRET, { expiresIn: "1h" });
-  res.cookie("token", token);
-  res.send("Logged In");
-  });
+  try {
+      const brukere = await GetBruker(Brukernavn);
+      const bruker = brukere[0];
+      try{
+        bcrypt.compare(Passord, bruker.Passord).then((result) => {
+          delete bruker.password; 
+          // Lager en token
+          const token = jwt.sign(bruker, process.env.JWT_SECRET, { expiresIn: "1h" });
+          res.cookie("token", token);
+          res.send("Du er logget inn")
+        })
+      }catch(err){
+        res.sendStatus(418)
+      }
+  } catch (Error) {
+    console.log(Error);
+  }
 });
+
 
 // Log out a user
 router.post('/logout', (req, res) => {
   res.clearCookie("token");
   return res.redirect("/auth");
 });
+
+
+router.get('/setup', async (req, res) =>{
+  let result = await FirstUserCheck();
+  if(result === 0){
+    bcrypt.hash("1234", saltRounds, async (err, hash) => {
+      const user = await CreateBruker("Admin", "admin@placeholder.com", hash, 1, 2);
+    })
+  }
+})
+
 
 export default router;

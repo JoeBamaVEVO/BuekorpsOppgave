@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts/admin.js" defer ></script>
+</head>
+<body>
+    <nav>
+        <form action="/Auth/logout" method="POST">
+            <button id="Logout">Logout</button>
+        </form>
+        <form action="/" method="GET">
+            <button id="Logout">Medlemoversikt</button>
+        </form>
+    </nav>
+    <div class="container">
+        <div class="btnMeny">
+            <button id="btnNyBruker" class="btnNyMedlem">Opprett en ny bruker</button>
+        </div>
+        <table class="table">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Brukernavn</th>
+                <th scope="col">Email</th>
+                <th scope="col">Rolle</th>
+                <th>Handlinger</th>
+            </tr>
+        </table>
+        <dialog id="MedlemModal">
+            <h1>Register en ny bruker</h1>
+            <form id="RegisterBruker">
+                <input type="text" name="Brukernavn" placeholder="Brukernavn" required>
+                <input type="email" name="Email" placeholder="Email" required>
+                <input type="password" name="Passord" placeholder="Passord" required>
+                <div class=""> 
+                    <label for="isAdmin">Opprett admin konto</label>
+                    <br>
+                    <input name="isAdmin" id="isAdmin" type="checkbox">
+                </div>
+                <select name="Rolle" id="Rolle" required>
+                    <option value="1">Gjest</option>
+                    <option value="2" disabled>Admin</option>
+                </select>
+                <input type="submit" alue="Register Bruker">                    
+                </select>
+            </form>
+        </dialog>  
+    </div>
+</body>
+</html>
