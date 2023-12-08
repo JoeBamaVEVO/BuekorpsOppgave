@@ -5,22 +5,23 @@ let RegisterBrukerForm = document.getElementById("RegisterBruker")
 
 let AdminBtn = document.getElementById("isAdmin")
 
-AdminBtn.addEventListener("click", () => {
-    if(AdminBtn.checked){
-        let select     
-    }
-})
+// AdminBtn.addEventListener("click", () => {
+//     if(AdminBtn.checked){
+//         let select     
+//     }
+// })
 
 btnNyBruker.addEventListener("click", () => {
     BrukerModal.showModal()
 })
 
-RegisterBrukerForm.addEventListener("submit", () => {
-    MedlemDialog.close() // Lukker dialogen
+RegisterBrukerForm.addEventListener("submit", (e) => {
+    BrukerModal.close() // Lukker dialogen
     e.preventDefault() // Forhindrer at skjemaet sender data til serveren
     const brukerFormData = new FormData(RegisterBrukerForm) // Lager et FormData objekt av skjemaet
     const brukerData = JSON.stringify(Object.fromEntries(brukerFormData)); // Lager et JSON objekt av FormData
-    // RegisterBrukerForm(brukerData) // Kaller på addUser funksjonen og sender med JSON objektet
+    console.log(brukerData)
+    RegisterBruker(brukerData) // Kaller på addUser funksjonen og sender med JSON objektet
 })
 
 async function RegisterBruker(brukerData){

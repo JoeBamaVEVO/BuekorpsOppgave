@@ -145,8 +145,12 @@
     
             <div class="form-row">
                 <div class="InputGroup">
-                    <label for="peloton">Peloton:</label>
-                    <input type="text" id="pelotong" name="PelotongID" required>
+                    <label for="pelotong">Peloton:</label>
+                    <!-- <input type="text" id="pelotong" name="PelotongID" required> -->
+                    <select name="PelotongID" id="pelotong" required>
+                        <option value="1">1.Pelotong</option>
+                        <option value="2">2.Pelotong</option>
+                    </select>
                 </div>
                 <div class="InputGroup">
                     <label for="rang">Rang:</label>
@@ -161,6 +165,5 @@
             <input type="submit" value="Oppdater">
         </form>
     </dialog>
-
 </body>
 </html>

@@ -36,7 +36,11 @@ export function createMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Pos
         'INSERT INTO medlem (Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, Pelotong_idPelotong, Rang_idRang) VALUES (?,?,?,?,?,?,?,?,?)'
     ).run(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang);
     const id = result.lastInsertRowid;
-    return getMedlem(id);
+    if(!result){
+        throw new Error("Medlem not created");
+    }else{
+        return getMedlem(id);
+    }
 }
 
 export function updateMedlem(Fornavn, Etternavn, Alder, Adresse, Postnummer, Postadresse, Tlf, PelotongID, Rang, id) {
@@ -50,7 +54,11 @@ export function createBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter)
     const result = db.prepare(
         'INSERT INTO brukere (Brukernavn, Email, Passord, isAdmin, Rettigheter_idRettigheter) VALUES (?,?,?,?,?)'
     ).run(Brukernavn, Email, Passord, isAdmin, idRettigheter);
-    return result;
+    if(!result){
+        throw new Error("User not created");
+    }else{
+        return result;
+    }
 }
 
 export function getBruker(Brukernavn) {
