@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `brukere` (
   `idBrukere` INTEGER PRIMARY KEY AUTOINCREMENT,
   `Brukernavn` TEXT,
-  `Email` TEXT,
+  `Email` TEXT UNIQUE,
   `Passord` TEXT,
   `isAdmin` INTEGER DEFAULT 0,
   `Rettigheter_idRettigheter` INTEGER NOT NULL DEFAULT 1,
