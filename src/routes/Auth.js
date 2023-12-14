@@ -20,11 +20,13 @@ import { createBruker, getBruker, firstUserCheck } from '../DB.js';
 // Set up salt rounds for hashing and comparing passwords
 const saltRounds = 10;
 
+router.get("/test", (req, res) => {
+  res.json({ FAEN: res.locals.FAEN });
+})
+
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/login.html'));
 });
-
-
 
 router.post('/loginSend', async (req, res) => {
   const { Brukernavn, Passord } = req.body;

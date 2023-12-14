@@ -15,6 +15,10 @@ router.get("/medlemoversikt", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
 })
 
+router.get("/test", (req, res) => {
+   res.send(res.locals.FAEN)
+})
+
 router.get("/medlemmer", async (req, res) => {
     const users = await getMedlemmer();
     res.json(users);

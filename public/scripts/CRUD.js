@@ -1,4 +1,3 @@
-
 const btnNewMember = document.getElementById("btnNyMedlem")
 const MedlemDialog = document.getElementById("MedlemDialog")
 const MedlemForm = document.getElementById("MedlemForm")
@@ -7,6 +6,18 @@ const MedlemForm = document.getElementById("MedlemForm")
 const OppdaterMedlemDialog = document.getElementById("OppdaterDialog")
 const OppdaterMedlemForm = document.getElementById("OppdaterForm")
 
+async function test() {
+let response = await fetch('/auth/test',{
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+});
+let result = await response.json();
+console.log(result)
+}
+
+test()
 
 btnNewMember.addEventListener("click", () => {
     MedlemDialog.showModal()

@@ -4,13 +4,11 @@ import path from 'path';
 
 // Import the routesrs
 import {cookieJwtAuth} from './middleware/token.js';
-import {JWTAdmin} from './middleware/isAdmin.js';
+import {JWTAdmin, checkUser} from './middleware/isAdmin.js';
 
 import loginRoutes from './routes/Auth.js';
 import medlemRoutes from './routes/Medlemmer.js';
 import adminRoutes from './routes/admin.js';
-
-
 
 // Vi setter __dirname til å være der vi kjører Node Serveren fra
 const __dirname = path.resolve();
@@ -19,6 +17,7 @@ const __dirname = path.resolve();
 const app = express();
 
 import cookieParser from 'cookie-parser';
+
 app.use(cookieParser());
 
 // Vi setter opp express til å servere statiske filer fra public mappen
@@ -29,6 +28,8 @@ app.use(express.json());
 app.get("/", cookieJwtAuth, async (req, res) => {
     res.sendFile(path.join(__dirname, "../private/medlemoversikt.html"));
 });
+
+app.get('*', checkUser);
 
 app.use('/medlem', cookieJwtAuth, medlemRoutes);
 
