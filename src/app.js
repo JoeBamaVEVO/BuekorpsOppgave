@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, '../public'),{ 'extensions': ['html'
 app.use(express.json());
 
 app.get("/", cookieJwtAuth, async (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/medlemoversikt.html"));
+    res.sendFile(path.join(__dirname, "../private/medlemoversikt.html"));
 });
 
 app.use('/medlem', cookieJwtAuth, medlemRoutes);
