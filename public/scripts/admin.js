@@ -1,7 +1,7 @@
 const btnNyBruker = document.getElementById("btnNyBruker")
 const BrukerModal = document.getElementById("BrukerModal")
 const OppdaterBrukerDialog = document.getElementById("OppdaterBrukerDialog")
-const OppdaterBrukerForm = document.getElementById("OppdaterDialog")
+const OppdaterBrukerForm = document.getElementById("OppdaterBrukerForm")
 
 // const BrukerID = document.getElementById("BrukerID")
 
@@ -15,6 +15,18 @@ btnNyBruker.addEventListener("click", () => {
 })
 
 getBrukere();
+
+
+OppdaterBrukerForm.addEventListener("submit", (e) => {
+    BrukerModal.close() // Lukker dialogen
+    e.preventDefault() // Forhindrer at skjemaet sender data til serveren
+    const brukerFormData = new FormData(OppdaterBrukerForm) // Lager et FormData objekt av skjemaet
+    const brukerData = JSON.stringify(Object.fromEntries(brukerFormData)); // Lager et JSON objekt av FormData
+    console.log(brukerData)
+    id = BrukerID.innerText;
+
+    OppdaterBruker(id, brukerData) // Kaller på addUser funksjonen og sender med JSON objektet
+})
 
 RegisterBrukerForm.addEventListener("submit", (e) => {
     BrukerModal.close() // Lukker dialogen
@@ -79,7 +91,7 @@ function ListBruker(bruker) {
     MerInfoBtn.src = "img/icons/arrow-down.svg"
 
     DelBtn.addEventListener("click" , () => DeleteBruker(bruker.idBrukere))
-    EditBtn.addEventListener("click" , () => PopulateBrukerUpdateForm(bruker.idBrukere))
+    EditBtn.addEventListener("click" , () => PopulateBrukerUpdateForm(bruker.Brukernavn, bruker.idBrukere))
     MerInfoBtn.addEventListener("click" , () => /*MerInfo(medlem.MedlemsID)*/ console.log("Mer info"))
 
     ID.innerHTML = bruker.idBrukere
@@ -101,24 +113,33 @@ async function DeleteBruker(idBrukere){
     location.reload();
 }
 
-async function PopulateBrukerUpdateForm(idBrukere){
-    let BrukerData = await getBruker(idBrukere);
-    if(BrukerData.isAdmin == true) {
-        AdminBtn.checked = true;
-    } else {
-        AdminBtn.checked = false;
-    }
-    BrukerID.innerText = idBrukere;
+async function PopulateBrukerUpdateForm(Brukernavn, id){
+    let BrukerData = await getBruker(Brukernavn);
 
-    let form = document.getElementById("OppdaterBrukerForm");
+    BrukerID.innerText = id;
+
+    let form = OppdaterBrukerForm;
     
     for(let key of Object.keys(BrukerData)) {
         if (form.elements[key] = BrukerData[key]) {
             form.elements[key].value = BrukerData[key];
         }
     }
-
     OppdaterBrukerDialog.showModal();
+}
+
+
+async function OppdaterBruker(id, brukerData){
+    let response = await fetch('/admin/bruker/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: brukerData
+    });
+    let result = await response.json();
+    console.log(result);
+    location.reload();
 }
 
 

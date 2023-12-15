@@ -71,14 +71,15 @@ export function deleteBruker(id) {
    
 }
 
-export function getBruker(id) {
+// Her bruker vi brukernavn for å finne bruker pga login funksjonen
+export function getBruker(Brukernavn) {
     const result = db.prepare(
         `SELECT * FROM brukere 
         INNER JOIN rettigheter
         ON Rettigheter_idRettigheter = idRettigheter
-        WHERE idBrukere = ?; 
+        WHERE Brukernavn = ?; 
         `
-    ).get(id);
+    ).get(Brukernavn);
     if (!result) {
         throw new Error("User not found");
     } else {
@@ -99,4 +100,12 @@ export function getBrukere() {
 export function firstUserCheck() {
     const result = db.prepare(`SELECT COUNT(*) FROM brukere`).get();
     return result['COUNT(*)'];
+}
+
+
+export function updateBruker(Brukernavn, Email, Hash, isAdmin, Rolle, id) {
+    db.prepare(
+        'UPDATE brukere SET Brukernavn = ?, Email = ?, Passord = ?, isAdmin = ?, Rettigheter_idRettigheter = ? WHERE idBrukere = ?'
+    ).run(Brukernavn, Email, Hash, isAdmin, Rolle, id);
+    return getBruker(Brukernavn);
 }
