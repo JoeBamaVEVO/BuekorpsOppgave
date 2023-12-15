@@ -5,11 +5,6 @@ let RegisterBrukerForm = document.getElementById("RegisterBruker")
 
 let AdminBtn = document.getElementById("isAdmin")
 
-// AdminBtn.addEventListener("click", () => {
-//     if(AdminBtn.checked){
-//         let select     
-//     }
-// })
 
 btnNyBruker.addEventListener("click", () => {
     BrukerModal.showModal()
