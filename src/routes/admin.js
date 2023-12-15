@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import path from 'path';
-import { getBrukere, getBruker, createBruker, deleteBruker } from '../DB.js';
+import { getBrukere, getBruker, createBruker, deleteBruker, updateBruker } from '../DB.js';
 const saltRounds = 10;
 
 
@@ -53,5 +53,18 @@ router.post('/Nybruker', async (req, res) => {
     const bruker = await deleteBruker(id);
     res.status(201).send(bruker);
   })
+
+  router.put("/bruker/:id", async (req, res) => {
+    const id = req.params.id;
+    const { Brukernavn, Email, Passord, isAdmin, Rolle} = req.body;
+    bcrypt.hash(Passord, saltRounds, async (err, Hash) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Noe gikk galt');
+      } else {
+    const user = await updateBruker(Brukernavn, Email, Hash, isAdmin, Rolle, id);
+    res.send(user);
+  }})
+});
 
 export default router;
