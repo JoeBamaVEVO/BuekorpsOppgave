@@ -21,7 +21,7 @@ import { createBruker, getBruker, firstUserCheck } from '../DB.js';
 const saltRounds = 10;
 
 router.get("/test", (req, res) => {
-  res.json({ FAEN: res.locals.FAEN });
+  res.json(res.locals.user.isAdmin);
 })
 
 router.get('/', (req, res) => {

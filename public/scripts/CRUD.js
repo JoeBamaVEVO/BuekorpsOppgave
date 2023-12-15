@@ -6,7 +6,7 @@ const MedlemForm = document.getElementById("MedlemForm")
 const OppdaterMedlemDialog = document.getElementById("OppdaterDialog")
 const OppdaterMedlemForm = document.getElementById("OppdaterForm")
 
-async function test() {
+async function AdminPrivCheck() {
 let response = await fetch('/auth/test',{
     method: 'GET',
     headers: {
@@ -14,14 +14,22 @@ let response = await fetch('/auth/test',{
     },
 });
 let result = await response.json();
-console.log(result)
+console.log(result);
 }
 
-test()
-
 btnNewMember.addEventListener("click", () => {
-    MedlemDialog.showModal()
+    buttonListener();
 });
+
+async function buttonListener() {
+    let res = await fetch('/auth/test');
+    let result = await res.json();
+    if(result == true) {
+        MedlemDialog.showModal();
+    } else {
+        alert("Du kan ikke legge til medlemmer")
+    }
+}
 
 MedlemForm.addEventListener("submit", (e) => {
     MedlemDialog.close() // Lukker dialogen
@@ -129,13 +137,19 @@ function ListUsers(medlem) {
 }
 
 async function DeleteUser(id) {
-    let response = await fetch('/Medlem/medlemmer/' + id, {
-        method: 'DELETE'
-    });
-    let result = await response.json();
-    console.log(result);
-    location.reload();
-}
+    let res = await fetch('/auth/test');
+    let isAdmin = await res.json();
+    if(isAdmin == true) {
+        let response = await fetch('/Medlem/medlemmer/' + id, {
+            method: 'DELETE'
+        });
+        let result = await response.json();
+        console.log(result);
+        location.reload();
+    }else{
+        alert("Du kan ikke slette medlemmer")
+    }
+}   
 
 // Henter ut et medlem fra databasen og skriver det ut i konsollen
 async function getUser(id) {

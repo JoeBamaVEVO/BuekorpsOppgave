@@ -19,7 +19,6 @@ export const checkUser = (req, res, next) => {
         res.locals.user = null;
         next();
       } else {
-        // let user =  
         res.locals.user = decodedToken;
         next();
       }
