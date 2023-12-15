@@ -42,8 +42,7 @@ app.use((err, req, res, next) => {
 
 
 //Admin Routes
-
-app.use('/admin', cookieJwtAuth, JWTAdmin, adminRoutes);
+app.use('/admin',cookieJwtAuth, JWTAdmin, adminRoutes);
 
 app.listen(8080, () => {
     console.log('server is running on http://localhost:8080');

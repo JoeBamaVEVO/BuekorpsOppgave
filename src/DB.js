@@ -61,6 +61,16 @@ export function createBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter)
     }
 }
 
+export function deleteBruker(id) {
+    try{
+        const result = db.prepare("DELETE FROM brukere WHERE idBrukere = ?").run(id);
+        return result;
+    }catch(error){
+        throw new Error("User not deleted");
+    }
+   
+}
+
 export function getBruker(Brukernavn) {
     const result = db.prepare(
         `SELECT * FROM brukere 

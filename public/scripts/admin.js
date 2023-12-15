@@ -10,6 +10,8 @@ btnNyBruker.addEventListener("click", () => {
     BrukerModal.showModal()
 })
 
+getBrukere();
+
 RegisterBrukerForm.addEventListener("submit", (e) => {
     BrukerModal.close() // Lukker dialogen
     e.preventDefault() // Forhindrer at skjemaet sender data til serveren
@@ -45,7 +47,6 @@ async function getBrukere() {
     }
 }
 
-getBrukere();
 
 function ListBruker(bruker) {
     const table = document.querySelector("tbody")
@@ -64,7 +65,7 @@ function ListBruker(bruker) {
     EditBtn.src = "img/icons/pencil-square.svg"
     MerInfoBtn.src = "img/icons/arrow-down.svg"
 
-    DelBtn.addEventListener("click" , () => DeleteUser(medlem.MedlemsID))
+    DelBtn.addEventListener("click" , () => DeleteBruker(bruker.idBrukere))
     EditBtn.addEventListener("click" , () => UpdateUser(medlem.MedlemsID))
     MerInfoBtn.addEventListener("click" , () => /*MerInfo(medlem.MedlemsID)*/ console.log("Mer info"))
 
@@ -76,4 +77,13 @@ function ListBruker(bruker) {
     btn.appendChild(MerInfoBtn)
     btn.appendChild(EditBtn)
     btn.appendChild(DelBtn)    
+}
+
+async function DeleteBruker(idBrukere){
+    let response = await fetch('/admin/brukere/' + idBrukere, {
+        method: 'DELETE'
+    });
+    let result = await response.json();
+    console.log(result);
+    location.reload();
 }
