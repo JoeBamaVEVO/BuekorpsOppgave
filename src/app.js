@@ -40,9 +40,9 @@ app.use((err, req, res, next) => {
     res.status(500).send("Noe gikk galt");
 });
 
-
+// cookieJwtAuth, JWTAdmin,
 //Admin Routes
-app.use('/admin',cookieJwtAuth, JWTAdmin, adminRoutes);
+app.use('/admin', adminRoutes);
 
 app.listen(8080, () => {
     console.log('server is running on http://localhost:8080');

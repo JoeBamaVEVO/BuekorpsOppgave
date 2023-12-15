@@ -71,14 +71,14 @@ export function deleteBruker(id) {
    
 }
 
-export function getBruker(Brukernavn) {
+export function getBruker(id) {
     const result = db.prepare(
         `SELECT * FROM brukere 
         INNER JOIN rettigheter
         ON Rettigheter_idRettigheter = idRettigheter
-        WHERE Brukernavn = ?; 
+        WHERE idBrukere = ?; 
         `
-    ).get(Brukernavn);
+    ).get(id);
     if (!result) {
         throw new Error("User not found");
     } else {

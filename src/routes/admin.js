@@ -21,9 +21,9 @@ router.get("/brukere", async (req, res) => {
     res.json(Brukere);
 })
 
-router.get("/bruker/:brukernavn", async (req, res) => {
-    const brukernavn = req.params.brukernavn;
-    const bruker = await getBruker(brukernavn);
+router.get("/bruker/:id", async (req, res) => {
+    const id = req.params.id;
+    const bruker = await getBruker(id);
     res.status(201).send(bruker);
 })
 

@@ -1,9 +1,13 @@
-let btnNyBruker = document.getElementById("btnNyBruker")
-let BrukerModal = document.getElementById("MedlemModal")
+const btnNyBruker = document.getElementById("btnNyBruker")
+const BrukerModal = document.getElementById("BrukerModal")
+const OppdaterBrukerDialog = document.getElementById("OppdaterBrukerDialog")
+const OppdaterBrukerForm = document.getElementById("OppdaterDialog")
 
-let RegisterBrukerForm = document.getElementById("RegisterBruker")
+// const BrukerID = document.getElementById("BrukerID")
 
-let AdminBtn = document.getElementById("isAdmin")
+const RegisterBrukerForm = document.getElementById("RegisterBruker")
+
+const AdminBtn = document.getElementById("isAdmin")
 
 
 btnNyBruker.addEventListener("click", () => {
@@ -47,6 +51,15 @@ async function getBrukere() {
     }
 }
 
+async function getBruker(id) {
+    let response = await fetch('/admin/bruker/' + id);
+    let bruker = await response.json();
+    console.log(bruker)
+    return bruker;
+}
+
+
+
 
 function ListBruker(bruker) {
     const table = document.querySelector("tbody")
@@ -66,7 +79,7 @@ function ListBruker(bruker) {
     MerInfoBtn.src = "img/icons/arrow-down.svg"
 
     DelBtn.addEventListener("click" , () => DeleteBruker(bruker.idBrukere))
-    EditBtn.addEventListener("click" , () => UpdateUser(medlem.MedlemsID))
+    EditBtn.addEventListener("click" , () => PopulateBrukerUpdateForm(bruker.idBrukere))
     MerInfoBtn.addEventListener("click" , () => /*MerInfo(medlem.MedlemsID)*/ console.log("Mer info"))
 
     ID.innerHTML = bruker.idBrukere
@@ -87,3 +100,26 @@ async function DeleteBruker(idBrukere){
     console.log(result);
     location.reload();
 }
+
+async function PopulateBrukerUpdateForm(idBrukere){
+    let BrukerData = await getBruker(idBrukere);
+    if(BrukerData.isAdmin == true) {
+        AdminBtn.checked = true;
+    } else {
+        AdminBtn.checked = false;
+    }
+    BrukerID.innerText = idBrukere;
+
+    let form = document.getElementById("OppdaterBrukerForm");
+    
+    for(let key of Object.keys(BrukerData)) {
+        if (form.elements[key] = BrukerData[key]) {
+            form.elements[key].value = BrukerData[key];
+        }
+    }
+
+    OppdaterBrukerDialog.showModal();
+}
+
+
+

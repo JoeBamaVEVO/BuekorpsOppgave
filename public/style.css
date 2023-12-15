@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 
-#RegisterBruker{
+.BrukerForm{
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -9,12 +9,12 @@
     gap: 10px;   
 }
 
-#RegisterBruker input{
+.BrukerForm input{
     width: 50%;
     margin: 0 auto;
 }
 
-#RegisterBruker select{
+.BrukerForm select{
     width: 50%;
     margin: 0 auto;
     border: 1px solid rgb(206, 206, 206);
