@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import path from 'path';
-import { getBrukere, getBruker, createBruker } from '../DB.js';
+import { getBrukere, getBruker, createBruker, deleteBruker } from '../DB.js';
 const saltRounds = 10;
 
 
@@ -21,9 +21,9 @@ router.get("/brukere", async (req, res) => {
     res.json(Brukere);
 })
 
-router.get("/bruker/:brukernavn", async (req, res) => {
-    const brukernavn = req.params.brukernavn;
-    const bruker = await getBruker(brukernavn);
+router.get("/bruker/:id", async (req, res) => {
+    const id = req.params.id;
+    const bruker = await getBruker(id);
     res.status(201).send(bruker);
 })
 
@@ -48,5 +48,10 @@ router.post('/Nybruker', async (req, res) => {
     });
   });
 
+  router.delete("/bruker/:id", async (req, res) => {
+    const id = req.params.id;
+    const bruker = await deleteBruker(id);
+    res.status(201).send(bruker);
+  })
 
 export default router;

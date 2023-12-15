@@ -29,9 +29,9 @@
                 <th>Handlinger</th>
             </tr>
         </table>
-        <dialog id="MedlemModal">
+        <dialog class="BrukerModal" id="BrukerModal">
             <h1>Register en ny bruker</h1>
-            <form id="RegisterBruker">
+            <form class="BrukerForm" id="RegisterBruker">
                 <input type="text" name="Brukernavn" placeholder="Brukernavn" required>
                 <input type="email" name="Email" placeholder="Email" required>
                 <input type="password" name="Passord" placeholder="Passord" required>
@@ -48,6 +48,25 @@
                 </select>
             </form>
         </dialog>  
+        <dialog class="BrukerModal" id="OppdaterBrukerDialog">
+            <h1>Oppdater medlem <span id="BrukerID"></span></h1>
+            <form class="BrukerForm" id="OppdaterBrukerForm">
+                <input type="text" name="Brukernavn" placeholder="Brukernavn" required>
+                <input type="email" name="Email" placeholder="Email" required>
+                <input type="password" name="Passord" placeholder="Passord" required>
+                <div class=""> 
+                    <label for="isAdmin">Opprett admin konto</label>
+                    <br>
+                    <input name="isAdmin" id="isAdmin" type="checkbox" value="1">
+                </div>
+                <select name="Rolle" id="Rolle" required>
+                    <option value="1">Gjest</option>
+                    <option value="2" disabled>Admin</option>
+                </select>
+                <input type="submit" value="Oppdater">                    
+                </select>
+            </form>
+        </dialog> 
     </div>
 </body>
 </html>

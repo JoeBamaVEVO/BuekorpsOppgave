@@ -40,9 +40,7 @@ app.use((err, req, res, next) => {
     res.status(500).send("Noe gikk galt");
 });
 
-
 //Admin Routes
-
 app.use('/admin', cookieJwtAuth, JWTAdmin, adminRoutes);
 
 app.listen(8080, () => {

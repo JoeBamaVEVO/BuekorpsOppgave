@@ -6,6 +6,12 @@ const MedlemForm = document.getElementById("MedlemForm")
 const OppdaterMedlemDialog = document.getElementById("OppdaterDialog")
 const OppdaterMedlemForm = document.getElementById("OppdaterForm")
 
+
+getUsers();
+
+
+
+// Sjekker om brukeren er admin
 async function AdminPrivCheck() {
 let response = await fetch('/auth/AdminCheck',{
     method: 'GET',
@@ -17,10 +23,12 @@ let result = await response.json();
 console.log(result);
 }
 
+//Eventlistner som lytter etter om knappen for å legge til medlemmer blir trykket på
 btnNewMember.addEventListener("click", () => {
     buttonListener();
 });
 
+//Funksjon som sjekker om brukeren er admin
 async function buttonListener() {
     let res = await fetch('/auth/AdminCheck');
     let result = await res.json();
@@ -31,6 +39,7 @@ async function buttonListener() {
     }
 }
 
+// Legger til en eventlistener på skjemaet som brukes til å legge til et medlem
 MedlemForm.addEventListener("submit", (e) => {
     MedlemDialog.close() // Lukker dialogen
     e.preventDefault() // Forhindrer at skjemaet sender data til serveren
@@ -39,6 +48,7 @@ MedlemForm.addEventListener("submit", (e) => {
     AddUser(UserData) // Kaller på addUser funksjonen og sender med JSON objektet
 })
 
+// Funksjon som legger til et medlem i databasen
 async function AddUser(UserData){
     let res = await fetch('/auth/AdminCheck');
     let result = await res.json();
@@ -56,27 +66,27 @@ async function AddUser(UserData){
         alert("Du kan ikke legge til medlemmer")
     }}
 
-
-async function UpdateUser(id) {
+// funksjon som henter ut et medlem fra databasen og skriver det ut i formen
+// sakl brukes til å oppdatere et medlem
+async function PopulateUserUpdateForm(id) {
     let res = await fetch('/auth/AdminCheck');
     let result = await res.json();
     if(result == true) {
         let MedlemData = await getUser(id);
-        console.log(MedlemData);
-        console.log(Object.keys(MedlemData));
         let form = OppdaterMedlemForm;
 
         MedlemID.innerText = MedlemData.MedlemsID;
 
         for(let key of Object.keys(MedlemData)) {
             // console.log(key);
+            // console.log(form.elements[key]);
+            console.log(MedlemData[key]);
             if (form.elements[key]) {
                 form.elements[key].value = MedlemData[key];
             }
         }
 
         OppdaterMedlemDialog.showModal();
-        console.log('Denne brukeren er bruker ' + id); 
     }
     else {
         alert("Du kan ikke oppdatere medlemmer")
@@ -84,21 +94,22 @@ async function UpdateUser(id) {
 }
 
 // Legger til en eventlistener på skjemaet som brukes til å oppdatere et medlem
-//     Denne blir aktivert når Formen blir submitted
+//Denne blir aktivert når Formen blir submitted
 OppdaterMedlemForm.addEventListener("submit", (e) => {
     e.preventDefault(); // Forhindrer at skjemaet sender data til serveren
+
     let id = document.getElementById("MedlemID").innerText;
-    console.log('Denne brukeren er bruker ' + id);
     OppdaterMedlemDialog.close(); // Lukker dialogen
+    
     const OppdaterMedlemFormData = new FormData(OppdaterMedlemForm); // Lager et FormData objekt av skjemaet
     const OppdaterUserData = JSON.stringify(Object.fromEntries(OppdaterMedlemFormData)); // Lager et JSON objekt av FormData
-    console.log(OppdaterUserData);
+    
     EditUser(id, OppdaterUserData); // Kaller på addUser funksjonen og sender med JSON objektet
 });
 
 
 
-
+//Funksjon som oppdaterer et medlem i databasen
 async function EditUser(id, OppdaterUserData) {
     let response = await fetch('/Medlem/medlemmer/' + id, {
         method: 'PUT',
@@ -112,6 +123,7 @@ async function EditUser(id, OppdaterUserData) {
     location.reload();
 }
 
+// Funksjon som legger til et medlem i tabellen
 function ListUsers(medlem) {
     const table = document.querySelector("tbody")
     const row = table.insertRow(-1)
@@ -131,7 +143,7 @@ function ListUsers(medlem) {
     MerInfoBtn.src = "img/icons/arrow-down.svg"
 
     DelBtn.addEventListener("click" , () => DeleteUser(medlem.MedlemsID))
-    EditBtn.addEventListener("click" , () => UpdateUser(medlem.MedlemsID))
+    EditBtn.addEventListener("click" , () => PopulateUserUpdateForm(medlem.MedlemsID))
     MerInfoBtn.addEventListener("click" , () => /*MerInfo(medlem.MedlemsID)*/ console.log("Mer info"))
 
     ID.innerHTML = medlem.MedlemsID
@@ -160,11 +172,10 @@ async function DeleteUser(id) {
     }
 }   
 
-// Henter ut et medlem fra databasen og skriver det ut i konsollen
+// Henter ut et medlem fra databasen og returnerer det
 async function getUser(id) {
     let response = await fetch('/Medlem/medlemmer/' + id);
     let medlem = await response.json();
-    console.log(medlem);
     return medlem;
 }
 
@@ -172,12 +183,9 @@ async function getUser(id) {
 async function getUsers() {
     let response = await fetch('/Medlem/medlemmer');
     let medlemmer = await response.json();
-    console.log(medlemmer[0])
     
     for (let medlem of medlemmer) {
         ListUsers(medlem)
-        console.log(medlem);
     }
 }
 
-getUsers();

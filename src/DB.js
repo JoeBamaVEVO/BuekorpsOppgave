@@ -61,14 +61,24 @@ export function createBruker(Brukernavn, Email, Passord, isAdmin, idRettigheter)
     }
 }
 
-export function getBruker(Brukernavn) {
+export function deleteBruker(id) {
+    try{
+        const result = db.prepare("DELETE FROM brukere WHERE idBrukere = ?").run(id);
+        return result;
+    }catch(error){
+        throw new Error("User not deleted");
+    }
+   
+}
+
+export function getBruker(id) {
     const result = db.prepare(
         `SELECT * FROM brukere 
         INNER JOIN rettigheter
         ON Rettigheter_idRettigheter = idRettigheter
-        WHERE Brukernavn = ?; 
+        WHERE idBrukere = ?; 
         `
-    ).get(Brukernavn);
+    ).get(id);
     if (!result) {
         throw new Error("User not found");
     } else {
