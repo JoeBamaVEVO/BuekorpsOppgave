@@ -80,7 +80,7 @@ function ListBruker(bruker) {
 }
 
 async function DeleteBruker(idBrukere){
-    let response = await fetch('/admin/brukere/' + idBrukere, {
+    let response = await fetch('/admin/bruker/' + idBrukere, {
         method: 'DELETE'
     });
     let result = await response.json();
