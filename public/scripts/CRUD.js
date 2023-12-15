@@ -7,7 +7,7 @@ const OppdaterMedlemDialog = document.getElementById("OppdaterDialog")
 const OppdaterMedlemForm = document.getElementById("OppdaterForm")
 
 async function AdminPrivCheck() {
-let response = await fetch('/auth/test',{
+let response = await fetch('/auth/AdminCheck',{
     method: 'GET',
     headers: {
         'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ btnNewMember.addEventListener("click", () => {
 });
 
 async function buttonListener() {
-    let res = await fetch('/auth/test');
+    let res = await fetch('/auth/AdminCheck');
     let result = await res.json();
     if(result == true) {
         MedlemDialog.showModal();
@@ -40,7 +40,7 @@ MedlemForm.addEventListener("submit", (e) => {
 })
 
 async function AddUser(UserData){
-    let res = await fetch('/auth/test');
+    let res = await fetch('/auth/AdminCheck');
     let result = await res.json();
     if(result == true) {
         let response = await fetch('/Medlem/medlemmer', {
@@ -58,7 +58,7 @@ async function AddUser(UserData){
 
 
 async function UpdateUser(id) {
-    let res = await fetch('/auth/test');
+    let res = await fetch('/auth/AdminCheck');
     let result = await res.json();
     if(result == true) {
         let MedlemData = await getUser(id);
@@ -146,7 +146,7 @@ function ListUsers(medlem) {
 }
 
 async function DeleteUser(id) {
-    let res = await fetch('/auth/test');
+    let res = await fetch('/auth/AdminCheck');
     let isAdmin = await res.json();
     if(isAdmin == true) {
         let response = await fetch('/Medlem/medlemmer/' + id, {

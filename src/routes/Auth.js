@@ -20,7 +20,7 @@ import { createBruker, getBruker, firstUserCheck } from '../DB.js';
 // Set up salt rounds for hashing and comparing passwords
 const saltRounds = 10;
 
-router.get("/test", (req, res) => {
+router.get("/AdminCheck", (req, res) => {
   res.json(res.locals.user.isAdmin);
 })
 
