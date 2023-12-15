@@ -40,38 +40,47 @@ MedlemForm.addEventListener("submit", (e) => {
 })
 
 async function AddUser(UserData){
-    let response = await fetch('/Medlem/medlemmer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: UserData
-    });
-    location.reload();
-}
+    let res = await fetch('/auth/test');
+    let result = await res.json();
+    if(result == true) {
+        let response = await fetch('/Medlem/medlemmer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: UserData
+        });
+        location.reload();
+    } 
+    else {
+        alert("Du kan ikke legge til medlemmer")
+    }}
+
 
 async function UpdateUser(id) {
-    // får tak i brukeren som skal oppdateres
-    // Dataen som blir hentet her må vi fylle ut i skjemaet
-    let MedlemData = await getUser(id);
-    // Vi tar ut dataen fra JSON objektet og fyller ut skjemaet
-    // console.log("dette er medlemdata");
-    // console.log(MedlemData);
-    console.log(MedlemData);
-    console.log(Object.keys(MedlemData));
-    let form = OppdaterMedlemForm;
+    let res = await fetch('/auth/test');
+    let result = await res.json();
+    if(result == true) {
+        let MedlemData = await getUser(id);
+        console.log(MedlemData);
+        console.log(Object.keys(MedlemData));
+        let form = OppdaterMedlemForm;
 
-    MedlemID.innerText = MedlemData.MedlemsID;
+        MedlemID.innerText = MedlemData.MedlemsID;
 
-    for(let key of Object.keys(MedlemData)) {
-        // console.log(key);
-        if (form.elements[key]) {
-            form.elements[key].value = MedlemData[key];
+        for(let key of Object.keys(MedlemData)) {
+            // console.log(key);
+            if (form.elements[key]) {
+                form.elements[key].value = MedlemData[key];
+            }
         }
-    }
 
-    OppdaterMedlemDialog.showModal();
-    console.log('Denne brukeren er bruker ' + id);    
+        OppdaterMedlemDialog.showModal();
+        console.log('Denne brukeren er bruker ' + id); 
+    }
+    else {
+        alert("Du kan ikke oppdatere medlemmer")
+    }   
 }
 
 // Legger til en eventlistener på skjemaet som brukes til å oppdatere et medlem
